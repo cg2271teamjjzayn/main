@@ -1,0 +1,11 @@
+void setupMotors();
+void pwmForward(int value);
+void pwmBackward(int value);
+void brake();
+void left();
+void right();
+void forward();
+void backward();
+int remap(int value);
+int convertX(int value);
+int convertY(int value);
