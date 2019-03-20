@@ -7,12 +7,25 @@
 #include "bluetooth.h"
 #include "queues.h"
 #include "music.h"
+#include "leds.h"
 
 #define STACK_SIZE 200
 #define maxMotorDelayCommand portMAX_DELAY
+bool isMoving;
 
 QueueHandle_t xMotorCommandQueue;
+void xTaskLed (void *p) {
+	if (isMoving) {
+		runningMode();
+	} else {
+		stationaryMode();
+	}
+}
 
+
+void xTaskPlayBabyShark(void *p ) {
+
+}
 void xTaskMotor(void *p) {
 	char command;
 
@@ -44,6 +57,7 @@ void xTaskMotor(void *p) {
 }
 
 void setup() {
+	isMoving = false;
 	setupMotors();
 	setupBluetooth();
 	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
@@ -53,5 +67,6 @@ void setup() {
 void loop() {
 	// playTune();
 	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
+	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
 	vTaskStartScheduler();
 }
