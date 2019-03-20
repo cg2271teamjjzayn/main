@@ -10,12 +10,15 @@
 #define STACK_SIZE 200
 #define maxMotorDelayCommand portMAX_DELAY
 
-QueueHandle_t xMotorCommandQueue = xQueueCreate(10, sizeof(char));
+QueueHandle_t xMotorCommandQueue;
 
 void xTaskMotor(void *p) {
 	char command;
+
 	for (;;) {
-		if (xQueueReceive(xMotorCommandQueue, &command, maxMotorDelayCommand)) {
+		command = receiveData();
+		if (command != 'e') {
+			Serial.println(command);
 		    switch(command) {
 		      case 'f' :
 		    	  forward();
@@ -42,10 +45,10 @@ void xTaskMotor(void *p) {
 void setup() {
 	setupMotors();
 	setupBluetooth();
+	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
+	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
 }
 
 void loop() {
-
-	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
 	vTaskStartScheduler();
 }

@@ -3,17 +3,18 @@
 boolean forwardFlag = true;
 boolean backwardFlag = false;
 
-#define FW1 13
-#define BW1 12
+#define FW1 12
+#define BW1 13
 
-#define FW2 11 // PWM PIN
-#define BW2 10 // PWM PIN
+#define FW2 10 // PWM PIN
+#define BW2 11 // PWM PIN
 
-#define FW3 9 // PWM PIN
-#define BW3 6 // PWM PIN
+#define FW3 6 // PWM PIN
+#define BW3 9 // PWM PIN
 
-#define FW4 5 // PWM PIN
-#define BW4 3 // PWM PIN
+#define FW4 3 // PWM PIN
+#define BW4 5 // PWM PIN
+
 
 
 void setupMotors() {
@@ -69,27 +70,27 @@ void brake() {
 
 void left() {
   analogWrite(FW1, 200);
-  analogWrite(FW3, 200);
+  analogWrite(FW4, 200);
   analogWrite(BW2, 200);
-  analogWrite(BW4, 200);
+  analogWrite(BW3, 200);
 
-  analogWrite(FW2, 0);
-  analogWrite(FW4, 0);
   analogWrite(BW1, 0);
-  analogWrite(BW3, 0);
+  analogWrite(BW4, 0);
+  analogWrite(FW2, 0);
+  analogWrite(FW3, 0);
 }
 
 void right() {
 
-  analogWrite(FW2, 200);
-  analogWrite(FW4, 200);
   analogWrite(BW1, 200);
-  analogWrite(BW3, 200);
+  analogWrite(BW4, 200);
+  analogWrite(FW2, 200);
+  analogWrite(FW3, 200);
 
   analogWrite(FW1, 0);
-  analogWrite(FW3, 0);
+  analogWrite(FW4, 0);
   analogWrite(BW2, 0);
-  analogWrite(BW4, 0);
+  analogWrite(BW3, 0);
 }
 
 
