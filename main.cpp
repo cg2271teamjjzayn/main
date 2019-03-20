@@ -6,6 +6,7 @@
 #include "motors.h"
 #include "bluetooth.h"
 #include "queues.h"
+#include "music.h"
 
 #define STACK_SIZE 200
 #define maxMotorDelayCommand portMAX_DELAY
@@ -50,5 +51,7 @@ void setup() {
 }
 
 void loop() {
+	// playTune();
+	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
 	vTaskStartScheduler();
 }
