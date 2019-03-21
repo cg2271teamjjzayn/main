@@ -4,9 +4,6 @@
 #include "bluetooth.h"
 
 
-#define bluetoothTX 0
-#define bluetoothRX 1
-
 void setupBluetooth() {
 	Serial.begin(9600);
 }

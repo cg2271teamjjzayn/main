@@ -13,7 +13,7 @@
 #define maxMotorDelayCommand portMAX_DELAY
 bool isMoving;
 
-QueueHandle_t xMotorCommandQueue;
+QueueHandle_t xMotorCommandQueue, xBluetoothCommandQueue;
 void xTaskLed (void *p) {
 	if (isMoving) {
 		runningMode();
@@ -24,15 +24,40 @@ void xTaskLed (void *p) {
 
 
 void xTaskPlayBabyShark(void *p ) {
-
+	for (;;) {
+		playTune();
+	}
 }
-void xTaskMotor(void *p) {
-	char command;
 
+
+void xTaskBluetooth(void *p) {
+	char command;
 	for (;;) {
 		command = receiveData();
 		if (command != 'e') {
 			Serial.println(command);
+			switch (command) {
+				case 'f':
+				case 'b':
+				case 'l':
+				case 'r':
+				case 's':
+					xQueueSendToFront(xMotorCommandQueue, &command, 0);
+					vTaskDelay(20);
+					break;
+				default :
+					xQueueSendToFront(xBluetoothCommandQueue, &command, 0);
+					vTaskDelay(20);
+			}
+		}
+	}
+}
+
+void xTaskMotor(void *p) {
+	char command;
+
+	for (;;) {
+		if (xQueueReceive(xMotorCommandQueue, &command, 10)) {
 		    switch(command) {
 		      case 'f' :
 		    	  forward();
@@ -61,12 +86,14 @@ void setup() {
 	setupMotors();
 	setupBluetooth();
 	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
+	xBluetoothCommandQueue = xQueueCreate(10, sizeof(char));
+	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
 	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
+	xTaskCreate(xTaskPlayBabyShark, "TaskBabyShark", STACK_SIZE, NULL, 2, NULL);
+	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
+
 }
 
 void loop() {
-	// playTune();
-	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
-	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
 	vTaskStartScheduler();
 }
