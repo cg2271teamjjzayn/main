@@ -25,6 +25,7 @@ void xTaskLed (void *p) {
 void xTaskPlayBabyShark(void *p ) {
 	for (;;) {
 		playTune();
+
 	}
 }
 
@@ -82,12 +83,13 @@ void setup() {
 	isMoving = false;
 	setupMotors();
 	setupBluetooth();
+	setupMusic();
 	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
 	xBluetoothCommandQueue = xQueueCreate(10, sizeof(char));
-	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
-	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 4, NULL);
-	xTaskCreate(xTaskPlayBabyShark, "TaskBabyShark", STACK_SIZE, NULL, 2, NULL);
-	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
+//	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
+//	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 4, NULL);
+	xTaskCreate(xTaskPlayBabyShark, "TaskBabyShark", STACK_SIZE, NULL, 4, NULL);
+//	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
 
 }
 
