@@ -33,28 +33,6 @@ void setupMotors() {
 
 }
 
-void pwmForward(int value) {
-  int resolution = 100;
-  int duty_cycle = ((float) value/ 255.0) * resolution;
-  while(forwardFlag) {
-    digitalWrite(FW1, HIGH);
-    delay(duty_cycle);
-    digitalWrite(FW1, LOW);
-    delay(resolution - duty_cycle);
-  }
-}
-
-void pwmBackward(int value) {
-  int resolution = 100;
-  int duty_cycle = ((float) value/ 255.0) * resolution;
-  while(backwardFlag) {
-    digitalWrite(BW1, HIGH);
-    delay(duty_cycle);
-    digitalWrite(BW1, LOW);
-    delay(resolution - duty_cycle);
-
-  }
-}
 
 void brake() {
   analogWrite(FW1, 0);

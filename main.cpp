@@ -5,7 +5,6 @@
 #include <queue.h>
 #include "motors.h"
 #include "bluetooth.h"
-#include "queues.h"
 #include "music.h"
 #include "leds.h"
 
@@ -42,12 +41,10 @@ void xTaskBluetooth(void *p) {
 				case 'l':
 				case 'r':
 				case 's':
-					xQueueSendToFront(xMotorCommandQueue, &command, 0);
-					vTaskDelay(20);
+					xQueueSendToBack(xMotorCommandQueue, &command, 10);
 					break;
 				default :
-					xQueueSendToFront(xBluetoothCommandQueue, &command, 0);
-					vTaskDelay(20);
+					xQueueSendToBack(xBluetoothCommandQueue, &command, 10);
 			}
 		}
 	}
@@ -88,7 +85,7 @@ void setup() {
 	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
 	xBluetoothCommandQueue = xQueueCreate(10, sizeof(char));
 	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
-	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
+	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 4, NULL);
 	xTaskCreate(xTaskPlayBabyShark, "TaskBabyShark", STACK_SIZE, NULL, 2, NULL);
 	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
 
