@@ -1,50 +1,108 @@
 #include <Arduino.h>
 #include "leds.h"
-#define GREENLED 7
-#define REDLED 8
+
+
+void shiftOut(int myDataPin, int myClockPin, byte myDataOut) {
+
+  int i=0;
+  int pinState;
+  pinMode(myClockPin, OUTPUT);
+  pinMode(myDataPin, OUTPUT);
+  digitalWrite(myDataPin, 0);
+  digitalWrite(myClockPin, 0);
+
+  for (i=7; i>=0; i--)  {
+    digitalWrite(myClockPin, 0);
+    if ( myDataOut & (1<<i) ) {
+      pinState= 1;
+    } else {
+      pinState= 0;
+    }
+    digitalWrite(myDataPin, pinState);
+    digitalWrite(myClockPin, 1);
+    digitalWrite(myDataPin, 0);
+  }
+  digitalWrite(myClockPin, 0);
+}
+
+
+void blinkAll_2Bytes(int n, int d) {
+  digitalWrite(latchPin, 0);
+  shiftOut(greenDataPin, clockPin, 0);
+  shiftOut(greenDataPin, clockPin, 0);
+  digitalWrite(latchPin, 1);
+  delay(200);
+  for (int x = 0; x < n; x++) {
+    digitalWrite(latchPin, 0);
+    shiftOut(greenDataPin, clockPin, 255);
+    shiftOut(greenDataPin, clockPin, 255);
+    digitalWrite(latchPin, 1);
+    delay(d);
+    digitalWrite(latchPin, 0);
+    shiftOut(greenDataPin, clockPin, 0);
+    shiftOut(greenDataPin, clockPin, 0);
+    digitalWrite(latchPin, 1);
+    delay(d);
+  }
+}
+
 
 void setupLEDS() {
-	pinMode(GREENLED, OUTPUT);
-	pinMode(REDLED, OUTPUT);
+	pinMode(redLED, OUTPUT);
+	pinMode(latchPin, OUTPUT);
+
+	dataArray[0] = 0x01; //0b00000001
+	dataArray[1] = 0x02; //0b00000010
+	dataArray[2] = 0x04; //0b00000100
+	dataArray[3] = 0x08; //0b00001000
+	dataArray[4] = 0x10; //0b00010000
+	dataArray[5] = 0x20; //0b00100000
+	dataArray[6] = 0x40; //0b01000000
+	dataArray[7] = 0x80; //0b10000000
+
+	allLEDS = 0xFF;
+
+	blinkAll_2Bytes(2,500);
+
 }
 
 void runningMode() {
-
-	/**
-	 * The front 8 green led's must be in
-	 * RUNNING MODE(??) -- 1 LED at a time??
-	 * whenever the robot is moving
-	 */
-
-	//Write code here for green leds
-
-	/**
-	 * The 8 Red LED's must be flashing
-	 * continuously at a rate of 500ms ON,
-	 * 500ms off, while the robot is moving
-	 */
-	digitalWrite(REDLED,HIGH);
-	delay(500);
-	digitalWrite(REDLED, LOW);
-	delay(500);
+	greenRunning();
+	redRunning();
 }
 
+
 void stationaryMode() {
-	/** The front 8 green leds must be
-	 * all lighted up whenever the robot is stationary
-	 */
+	greenStationary();
+	redStationary();
+}
 
-	digitalWrite(GREENLED, HIGH);
+void redRunning () {
+	digitalWrite(redLED,HIGH);
+	delay(500);
+	digitalWrite(redLED, LOW);
+	delay(500);
+}
+void greenRunning () {
+	  for (int j = 0; j < 8; j++) {
+	    data = dataArray[j];
+	    digitalWrite(latchPin, 0);
+	    shiftOut(greenDataPin, clockPin, data);
+	    digitalWrite(latchPin, 1);
+	  }
+}
 
-	/**
-	 * The rear 8 Red leds must be flashing
-	 * continously at a rate of 250ms ON, 250ms OFF,
-	 * while the robot is stationary.
-	 */
-
-	digitalWrite(REDLED, HIGH);
+void redStationary() {
+	digitalWrite(redLED, HIGH);
 	delay(250);
-	digitalWrite(REDLED, LOW);
+	digitalWrite(redLED, LOW);
 	delay(250);
+}
+
+/**ground latchPin and hold low for as long as you are transmitting**/
+void greenStationary () {
+    digitalWrite(latchPin, 0);
+    shiftOut(greenDataPin, clockPin, allLEDS);
+    digitalWrite(latchPin, 1);
 
 }

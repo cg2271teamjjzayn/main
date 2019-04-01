@@ -6,7 +6,7 @@
 #include "motors.h"
 #include "bluetooth.h"
 #include "music.h"
-#include "leds.h"
+//#include "leds.h"
 
 #define STACK_SIZE 200
 #define maxMotorDelayCommand portMAX_DELAY
@@ -15,9 +15,9 @@ bool isMoving;
 QueueHandle_t xMotorCommandQueue, xBluetoothCommandQueue;
 void xTaskLed (void *p) {
 	if (isMoving) {
-		runningMode();
+		//runningMode();
 	} else {
-		stationaryMode();
+		//stationaryMode();
 	}
 }
 
@@ -81,16 +81,19 @@ void xTaskMotor(void *p) {
 void setup() {
 	isMoving = false;
 	setupMotors();
-	setupBluetooth();
-	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
-	xBluetoothCommandQueue = xQueueCreate(10, sizeof(char));
-	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
-	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 4, NULL);
-	xTaskCreate(xTaskPlayBabyShark, "TaskBabyShark", STACK_SIZE, NULL, 2, NULL);
-	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
+//	setupLEDS();
+//	setupBluetooth();
+//	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
+//	xBluetoothCommandQueue = xQueueCreate(10, sizeof(char));
+//	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
+//	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 4, NULL);
+//	xTaskCreate(xTaskPlayBabyShark, "TaskBabyShark", STACK_SIZE, NULL, 2, NULL);
+//	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
 
 }
 
 void loop() {
-	vTaskStartScheduler();
+	//	vTaskStartScheduler();
+//	runningMode();
+
 }
