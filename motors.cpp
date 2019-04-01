@@ -9,7 +9,6 @@ boolean backwardFlag = false;
 #define LF 6
 #define LB 9
 
-
 void setupMotors() {
 
 	pinMode(RF, OUTPUT);

@@ -1,6 +1,21 @@
 #include <Arduino.h>
 #include "leds.h"
+#include <FreeRTOS.h>
+#include <task.h>
+#include <queue.h>
 
+
+
+//Pin connected to ST_CP of 74HC595
+int latchPin = 8;
+//Pin connected to SH_CP of 74HC595
+int clockPin = 12;
+////Pin connected to DS of 74HC595
+int greenDataPin = 13;
+int redLED = 7;
+
+byte data, allLEDS;
+byte dataArray[10];
 
 void shiftOut(int myDataPin, int myClockPin, byte myDataOut) {
 
@@ -79,9 +94,9 @@ void stationaryMode() {
 
 void redRunning () {
 	digitalWrite(redLED,HIGH);
-	delay(500);
+	vTaskDelay(500);
 	digitalWrite(redLED, LOW);
-	delay(500);
+	vTaskDelay(500);
 }
 void greenRunning () {
 	  for (int j = 0; j < 8; j++) {
@@ -89,14 +104,15 @@ void greenRunning () {
 	    digitalWrite(latchPin, 0);
 	    shiftOut(greenDataPin, clockPin, data);
 	    digitalWrite(latchPin, 1);
+	    vTaskDelay(300);
 	  }
 }
 
 void redStationary() {
 	digitalWrite(redLED, HIGH);
-	delay(250);
+	vTaskDelay(250);
 	digitalWrite(redLED, LOW);
-	delay(250);
+	vTaskDelay(250);
 }
 
 /**ground latchPin and hold low for as long as you are transmitting**/
