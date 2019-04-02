@@ -1,6 +1,6 @@
-typedef struct MotorData {
+struct MotorData {
    int mData[2];
-}Struct;
+};
 
 
 void setupBluetooth();

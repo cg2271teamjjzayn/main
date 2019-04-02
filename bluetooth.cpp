@@ -6,15 +6,16 @@
 MotorData mdata;
 MotorData nullData;
 
+char in_code;
+char allData[9];
+int j = 0;
+
 
 void setupBluetooth() {
 	Serial.begin(9600);
 }
 
 MotorData getData() {
-	char in_code;
-	char allData[9];
-	int j = 0;
 
 	if(Serial.available()) {
 		in_code = Serial.read();
@@ -30,6 +31,7 @@ MotorData getData() {
 			}
 		    memset(allData, 0, sizeof(allData));
 		}
+
 		return mdata;
 	}
 	return nullData;

@@ -53,3 +53,10 @@ void backwardLeft(int pwm_R, int pwm_L) {
 
 void brake() {
 }
+
+void forward () {
+	analogWrite(RF, 250);
+	analogWrite(LF, 250);
+	analogWrite(RB, 0);
+	analogWrite(LB, 0);
+}
