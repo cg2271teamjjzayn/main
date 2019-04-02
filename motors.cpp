@@ -19,70 +19,37 @@ void setupMotors() {
 }
 
 void forwardRight(int pwm_L, int pwm_R) {
-	analogWrite(RIGHT_F, pwm_L - pwm_R  + 10);
-	analogWrite(LEFT_F, pwm_L );
+	analogWrite(RF, pwm_L - pwm_R  + 10);
+	analogWrite(LF, pwm_L );
 
-	analogWrite(RIGHT_B, 0);
-	analogWrite(LEFT_B, 0);
+	analogWrite(RB, 0);
+	analogWrite(LB, 0);
 }
 
 void forwardLeft(int pwm_R, int pwm_L) {
-	analogWrite(RIGHT_F, pwm_R );
-	analogWrite(LEFT_F, pwm_R - pwm_L + 10);
+	analogWrite(RF, pwm_R );
+	analogWrite(LF, pwm_R - pwm_L + 10);
 
-	analogWrite(RIGHT_B, 0);
-	analogWrite(LEFT_B, 0);
+	analogWrite(RB, 0);
+	analogWrite(LB, 0);
 }
 
 void backwardRight(int pwm_L, int pwm_R) {
-	analogWrite(RIGHT_B, pwm_L - pwm_R + 10);
-	analogWrite(LEFT_B, pwm_L );
+	analogWrite(RB, pwm_L - pwm_R + 10);
+	analogWrite(LB, pwm_L );
 
-	analogWrite(RIGHT_F, 0);
-	analogWrite(LEFT_F, 0);
+	analogWrite(RF, 0);
+	analogWrite(LF, 0);
 }
 
 void backwardLeft(int pwm_R, int pwm_L) {
-	analogWrite(RIGHT_B, pwm_R );
-	analogWrite(LEFT_B, pwm_R - pwm_L + 10);
+	analogWrite(RB, pwm_R );
+	analogWrite(LB, pwm_R - pwm_L + 10);
 
-	analogWrite(RIGHT_F, 0);
-	analogWrite(LEFT_F, 0);
+	analogWrite(RF, 0);
+	analogWrite(LF, 0);
 }
 
 
 void brake() {
-}
-
-void left() {
-
-}
-
-void right() {
-
-}
-
-
-void forward() {
-	analogWrite(RF, 250);
-	analogWrite(LF, 250);
-	analogWrite(RB, 0);
-	analogWrite(LB, 0);
-
-}
-
-void backward() {
-
-}
-
-int remap(int value) {
-  return value/1023.0 * 255;
-}
-
-int convertX(int value) {
-  return remap(value);
-}
-
-int convertY(int value) {
-  return remap(value);
 }
