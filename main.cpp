@@ -12,6 +12,10 @@
 #define maxMotorDelayCommand portMAX_DELAY
 bool isMoving;
 
+//typedef struct MotorData {
+//   int mData[2];
+//}Struct;
+
 QueueHandle_t xMotorCommandQueue, xBluetoothCommandQueue;
 void xTaskLed (void *p) {
 	if (isMoving) {
@@ -30,50 +34,35 @@ void xTaskPlayBabyShark(void *p ) {
 
 
 void xTaskBluetooth(void *p) {
-	char command;
+	MotorData command;
 	for (;;) {
-		command = receiveData();
-		if (command != 'e') {
-			Serial.println(command);
-			switch (command) {
-				case 'f':
-				case 'b':
-				case 'l':
-				case 'r':
-				case 's':
-					xQueueSendToBack(xMotorCommandQueue, &command, 10);
-					break;
-				default :
-					xQueueSendToBack(xBluetoothCommandQueue, &command, 10);
-			}
-		}
+			command = getData();
+			//Serial.println(command.mData[0]);
+			//Serial.println(command.mData[1]);
+			xQueueSendToBack(xMotorCommandQueue, &command, 100);
+			//xQueueSendToBack(xBluetoothCommandQueue, &command, 10);
+
 	}
 }
 
 void xTaskMotor(void *p) {
-	char command;
+	MotorData command;
 
 	for (;;) {
-		if (xQueueReceive(xMotorCommandQueue, &command, 10)) {
-		    switch(command) {
-		      case 'f' :
-		    	  forward();
-		    	  break;
-		      case 'b' :
-		    	  backward();
-		    	  break;
-		      case 'l' :
-		    	  left();
-		    	  break;
-		      case 'r' :
-		    	  right();
-		    	  break;
-		      case 's' :
-		    	  brake();
-		    	  break;
-		      case 'e' :
-		    	  break;
-		    }
+		if (xQueueReceive(xMotorCommandQueue, &command, 100)) {
+			if (command.mData[1] >= 0) {
+				if (command.mData[0] >= 0) {
+					forwardRight(command.mData[1], command.mData[0]);
+				} else if (command.mData[0] < 0) {
+					forwardLeft(command.mData[1], -command.mData[0]);
+				}
+			} else if (command.mData[1] < 0) {
+				if (command.mData[0] >= 0) {
+					backwardRight(-command.mData[1], command.mData[0]);
+				}else if (command.mData[0] < 0) {
+					backwardLeft(-command.mData[1], -command.mData[0]);
+				}
+			}
 		}
 	}
 }
@@ -82,6 +71,7 @@ void setup() {
 	isMoving = false;
 	setupMotors();
 	setupBluetooth();
+//	Serial.begin(9600);
 	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
 	xBluetoothCommandQueue = xQueueCreate(10, sizeof(char));
 	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
@@ -91,6 +81,31 @@ void setup() {
 
 }
 
+MotorData command;
+
 void loop() {
 	vTaskStartScheduler();
+//	if(Serial.available()) {
+//	command = getData();
+//	Serial.println(command.mData[0]);
+//	Serial.println(command.mData[1]);
+//		if (command.mData[1] >= 0) {
+//			if (command.mData[0] >= 0) {
+//				forwardRight(command.mData[1], command.mData[0]);
+//			}
+//			if (command.mData[0] < 0) {
+//				forwardLeft(command.mData[1], -command.mData[0]);
+//			}
+//		} else if (command.mData[1] < 0) {
+//			if (command.mData[0] >= 0) {
+//				backwardRight(-command.mData[1], command.mData[0]);
+//			}
+//			if (command.mData[0] < 0) {
+//				backwardLeft(-command.mData[1], -command.mData[0]);
+//			}
+//		}
+
+//	}
+	//analogWrite(10, 200);
+
 }

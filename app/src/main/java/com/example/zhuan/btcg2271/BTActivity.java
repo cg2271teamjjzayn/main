@@ -65,7 +65,7 @@ public class BTActivity extends AppCompatActivity {
 //    private TextView status;
 
     private int power;
-    private double pwm;
+    private int pwm;
 
 //    private Bluetooth btCom;
 //    private BluetoothSPP bt;
@@ -185,25 +185,32 @@ public class BTActivity extends AppCompatActivity {
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
             public void onMove(int angle, int strength) {
-                if(angle >= 1 && angle <= 90) {
-                    power = (int) (((double) strength / 100) * 1023);
-                    pwm = power * Math.cos(Math.toRadians((double) angle));
+                double pwm2;
+                if (angle >= 1 && angle <= 90) {
+                    power = (int) (((double) strength / 100) * 250);
+                    pwm2 = power * Math.cos(Math.toRadians((double) angle));
                 } else if (angle >= 91 && angle <= 180) {
-                    power = (int) (((double) strength / 100) * 1023);
-                    pwm = -power * Math.cos(Math.toRadians(180.0 - (double) angle));
+                    power = (int) (((double) strength / 100) * 250);
+                    pwm2 = -power * Math.cos(Math.toRadians(180.0 - (double) angle));
 
                 } else if (angle >= 181 && angle <= 270) {
-                    power = -(int) (((double) strength / 100) * 1023);
-                    pwm = -1023 - power * Math.cos(Math.toRadians(270.0 - (double) angle));
+                    power = -(int) (((double) strength / 100) * 250);
+                    pwm2 = -250 - power * Math.cos(Math.toRadians(270.0 - (double) angle));
 
                 } else {
-                    power = -(int) (((double) strength / 100) * 1023);
-                    pwm = -power * Math.cos(Math.toRadians(360.0 - (double) angle));
+                    power = -(int) (((double) strength / 100) * 250);
+                    pwm2 = -power * Math.cos(Math.toRadians(360.0 - (double) angle));
 
                 }
-                pwmData.setText(Double.toString(pwm));
                 strengthData.setText(Integer.toString(power));
-                mConnectedThread.write("motor" + Double.toString(pwm) + " " + Integer.toString(power));
+                pwm = (int) pwm2;
+                pwmData.setText(Integer.toString(pwm));
+                if(mConnectedThread != null) {
+                    //for (int i = 0; i < 10; i++) {
+                        //mReadBuffer.setText("Connected");
+                        mConnectedThread.write( "#"  + pwm + "#" + power + "e");
+                    //}
+                }
             }
         });
 
