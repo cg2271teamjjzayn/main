@@ -10,12 +10,44 @@ boolean backwardFlag = false;
 #define LB 9
 
 void setupMotors() {
-
 	pinMode(RF, OUTPUT);
 	pinMode(RB, OUTPUT);
 
 	pinMode(LF, OUTPUT);
 	pinMode(LB, OUTPUT);
+
+}
+
+void forwardRight(int pwm_L, int pwm_R) {
+	analogWrite(RIGHT_F, pwm_L - pwm_R  + 10);
+	analogWrite(LEFT_F, pwm_L );
+
+	analogWrite(RIGHT_B, 0);
+	analogWrite(LEFT_B, 0);
+}
+
+void forwardLeft(int pwm_R, int pwm_L) {
+	analogWrite(RIGHT_F, pwm_R );
+	analogWrite(LEFT_F, pwm_R - pwm_L + 10);
+
+	analogWrite(RIGHT_B, 0);
+	analogWrite(LEFT_B, 0);
+}
+
+void backwardRight(int pwm_L, int pwm_R) {
+	analogWrite(RIGHT_B, pwm_L - pwm_R + 10);
+	analogWrite(LEFT_B, pwm_L );
+
+	analogWrite(RIGHT_F, 0);
+	analogWrite(LEFT_F, 0);
+}
+
+void backwardLeft(int pwm_R, int pwm_L) {
+	analogWrite(RIGHT_B, pwm_R );
+	analogWrite(LEFT_B, pwm_R - pwm_L + 10);
+
+	analogWrite(RIGHT_F, 0);
+	analogWrite(LEFT_F, 0);
 }
 
 
