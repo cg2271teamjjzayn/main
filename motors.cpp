@@ -3,45 +3,18 @@
 boolean forwardFlag = true;
 boolean backwardFlag = false;
 
-#define FW1 12
-#define BW1 13
+#define RF 10
+#define RB 11
 
-#define FW2 10 // PWM PIN
-#define BW2 11 // PWM PIN
-
-#define FW3 6 // PWM PIN
-#define BW3 9 // PWM PIN
-
-#define FW4 3 // PWM PIN
-#define BW4 5 // PWM PIN
-
-#define RIGHT_F 10
-#define RIGHT_B 11
-
-#define LEFT_F 6
-#define LEFT_B 9
-
-
+#define LF 6
+#define LB 9
 
 void setupMotors() {
+	pinMode(RF, OUTPUT);
+	pinMode(RB, OUTPUT);
 
-//	pinMode(FW1, OUTPUT);
-//	pinMode(FW2, OUTPUT);
-//
-//	pinMode(FW2, OUTPUT);
-//	pinMode(BW2, OUTPUT);
-//
-//	pinMode(FW3, OUTPUT);
-//	pinMode(BW3, OUTPUT);
-//
-//	pinMode(FW4, OUTPUT);
-//	pinMode(BW4, OUTPUT);
-
-	pinMode(RIGHT_F, OUTPUT);
-	pinMode(RIGHT_B, OUTPUT);
-
-	pinMode(LEFT_F, OUTPUT);
-	pinMode(LEFT_B, OUTPUT);
+	pinMode(LF, OUTPUT);
+	pinMode(LB, OUTPUT);
 
 }
 
@@ -79,68 +52,27 @@ void backwardLeft(int pwm_R, int pwm_L) {
 
 
 void brake() {
-  analogWrite(FW1, 0);
-  analogWrite(FW2, 0);
-  analogWrite(FW3, 0);
-  analogWrite(FW4, 0);
-
-  analogWrite(BW1, 0);
-  analogWrite(BW2, 0);
-  analogWrite(BW3, 0);
-  analogWrite(BW4, 0);
 }
 
 void left() {
-  analogWrite(FW1, 200);
-  analogWrite(FW4, 200);
-  analogWrite(BW2, 200);
-  analogWrite(BW3, 200);
 
-  analogWrite(BW1, 0);
-  analogWrite(BW4, 0);
-  analogWrite(FW2, 0);
-  analogWrite(FW3, 0);
 }
 
 void right() {
 
-  analogWrite(BW1, 200);
-  analogWrite(BW4, 200);
-  analogWrite(FW2, 200);
-  analogWrite(FW3, 200);
-
-  analogWrite(FW1, 0);
-  analogWrite(FW4, 0);
-  analogWrite(BW2, 0);
-  analogWrite(BW3, 0);
 }
 
 
 void forward() {
-
-  analogWrite(FW1, 200);
-  analogWrite(FW2, 200);
-  analogWrite(FW3, 200);
-  analogWrite(FW4, 200);
-
-  analogWrite(BW1, 0);
-  analogWrite(BW2, 0);
-  analogWrite(BW3, 0);
-  analogWrite(BW4, 0);
+	analogWrite(RF, 250);
+	analogWrite(LF, 250);
+	analogWrite(RB, 0);
+	analogWrite(LB, 0);
 
 }
 
 void backward() {
 
-  analogWrite(FW1, 0);
-  analogWrite(FW2, 0);
-  analogWrite(FW3, 0);
-  analogWrite(FW4, 0);
-
-  analogWrite(BW1, 200);
-  analogWrite(BW2, 200);
-  analogWrite(BW3, 200);
-  analogWrite(BW4, 200);
 }
 
 int remap(int value) {

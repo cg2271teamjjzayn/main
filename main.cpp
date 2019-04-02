@@ -18,17 +18,25 @@ bool isMoving;
 
 QueueHandle_t xMotorCommandQueue, xBluetoothCommandQueue;
 void xTaskLed (void *p) {
-	if (isMoving) {
-		runningMode();
-	} else {
-		stationaryMode();
+	for (;;) {
+		if (isMoving) {
+			runningMode();
+		} else {
+			stationaryMode();
+		}
 	}
 }
 
 
 void xTaskPlayBabyShark(void *p ) {
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = 200;
+	xLastWakeTime = xTaskGetTickCount();
+
 	for (;;) {
-		playTune();
+		//playTune();
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+
 	}
 }
 
@@ -42,12 +50,38 @@ void xTaskBluetooth(void *p) {
 			xQueueSendToBack(xMotorCommandQueue, &command, 100);
 			//xQueueSendToBack(xBluetoothCommandQueue, &command, 10);
 
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = 10;
+	xLastWakeTime = xTaskGetTickCount();
+
+	char command;
+	for (;;) {
+		command = receiveData();
+		if (command != 'e') {
+			Serial.println(command);
+			switch (command) {
+				case 'f':
+				case 'b':
+				case 'l':
+				case 'r':
+				case 's':
+					xQueueSendToBack(xMotorCommandQueue, &command, 10);
+					break;
+				default :
+					xQueueSendToBack(xBluetoothCommandQueue, &command, 10);
+			}
+		}
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 
 void xTaskMotor(void *p) {
 	MotorData command;
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = 100;
+	xLastWakeTime = xTaskGetTickCount();
 
+	char command;
 	for (;;) {
 		if (xQueueReceive(xMotorCommandQueue, &command, 100)) {
 			if (command.mData[1] >= 0) {
@@ -64,12 +98,14 @@ void xTaskMotor(void *p) {
 				}
 			}
 		}
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 
 void setup() {
-	isMoving = false;
+	isMoving = true;
 	setupMotors();
+	setupLEDS();
 	setupBluetooth();
 //	Serial.begin(9600);
 	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
