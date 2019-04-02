@@ -46,6 +46,9 @@ void xTaskBluetooth(void *p) {
 
 	for (;;) {
 		command = getData();
+		Serial.println(command.mData[0]);
+		Serial.println(command.mData[0]);
+
 		xQueueSendToBack(xMotorCommandQueue, &command, 100);
 		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
@@ -73,21 +76,21 @@ void xTaskMotor(void *p) {
 				}
 			}
 		}
-		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+//		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 
 void setup() {
 	isMoving = true;
 	setupMotors();
-	setupLEDS();
+//	setupLEDS();
 	setupBluetooth();
 	xMotorCommandQueue = xQueueCreate(10, sizeof(char));
 	xBluetoothCommandQueue = xQueueCreate(10, sizeof(char));
 	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
-	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 4, NULL);
-	xTaskCreate(xTaskPlayBabyShark, "TaskBabyShark", STACK_SIZE, NULL, 2, NULL);
-	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
+//	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 4, NULL);
+//	xTaskCreate(xTaskPlayBabyShark, "TaskBabyShark", STACK_SIZE, NULL, 2, NULL);
+//	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
 
 }
 
