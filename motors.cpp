@@ -21,7 +21,9 @@ boolean backwardFlag = false;
 #define LEFT_F 6
 #define LEFT_B 9
 
+void motorSpin(){
 
+}
 
 void setupMotors() {
 

@@ -84,28 +84,28 @@ void setup() {
 MotorData command;
 
 void loop() {
-	vTaskStartScheduler();
-//	if(Serial.available()) {
-//	command = getData();
-//	Serial.println(command.mData[0]);
-//	Serial.println(command.mData[1]);
-//		if (command.mData[1] >= 0) {
-//			if (command.mData[0] >= 0) {
-//				forwardRight(command.mData[1], command.mData[0]);
-//			}
-//			if (command.mData[0] < 0) {
-//				forwardLeft(command.mData[1], -command.mData[0]);
-//			}
-//		} else if (command.mData[1] < 0) {
-//			if (command.mData[0] >= 0) {
-//				backwardRight(-command.mData[1], command.mData[0]);
-//			}
-//			if (command.mData[0] < 0) {
-//				backwardLeft(-command.mData[1], -command.mData[0]);
-//			}
-//		}
+//	vTaskStartScheduler();
+	if(Serial.available()) {
+	command = getData();
+	Serial.println(command.mData[0]);
+	Serial.println(command.mData[1]);
+		if (command.mData[1] >= 0) {
+			if (command.mData[0] >= 0) {
+				forwardRight(command.mData[1], command.mData[0]);
+			}
+			if (command.mData[0] < 0) {
+				forwardLeft(command.mData[1], -command.mData[0]);
+			}
+		} else if (command.mData[1] < 0) {
+			if (command.mData[0] >= 0) {
+				backwardRight(-command.mData[1], command.mData[0]);
+			}
+			if (command.mData[0] < 0) {
+				backwardLeft(-command.mData[1], -command.mData[0]);
+			}
+		}
 
-//	}
+	}
 	//analogWrite(10, 200);
 
 }
