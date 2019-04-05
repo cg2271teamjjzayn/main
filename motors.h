@@ -1,15 +1,7 @@
 void setupMotors();
-void pwmForward(int value);
-void pwmBackward(int value);
 void brake();
-void left();
-void right();
-void forward();
-void backward();
 void forwardRight(int value1, int value2);
 void forwardLeft(int value1, int value2);
 void backwardRight(int value1, int value2);
 void backwardLeft(int value1, int value2);
-int remap(int value);
-int convertX(int value);
-int convertY(int value);
+void forward();
