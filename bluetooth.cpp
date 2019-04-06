@@ -6,6 +6,7 @@
 MotorData mdata;
 MotorData nullData;
 
+
 char in_code;
 char allData[9];
 int j = 0;
@@ -34,6 +35,8 @@ MotorData getData() {
 
 		return mdata;
 	}
+	nullData.mData[0] = 0;
+	nullData.mData[1] = 0;
 	return nullData;
 }
 
