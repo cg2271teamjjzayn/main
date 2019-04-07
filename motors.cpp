@@ -6,11 +6,11 @@
 boolean forwardFlag = true;
 boolean backwardFlag = false;
 
-#define RF 10
-#define RB 11
+#define RF 9
+#define RB 10
 
-#define LF 6
-#define LB 9
+#define LF 5
+#define LB 6
 
 TickType_t ticks;
 const TickType_t xFrequency = 40;
@@ -154,11 +154,4 @@ void brake() {
 	digitalWrite(RB, LOW);
 	digitalWrite(LF, LOW);
 	digitalWrite(LB, LOW);
-}
-
-void forward () {
-	analogWrite(RF, 250);
-	analogWrite(LF, 250);
-	analogWrite(RB, 0);
-	analogWrite(LB, 0);
 }

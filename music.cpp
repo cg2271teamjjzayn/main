@@ -29,7 +29,87 @@ void setupMusic() {
 	pinMode(2, OUTPUT);
 }
 
-void playTune() {
+//#define BUZZER_PIN 2
+//
+//// #define TEMPO 400
+//#define TEMPO 3200
+//#define DNOTE 2349
+//#define ENOTE 2637
+//#define GNOTE 3136
+//#define FSNOTE 2960
+//
+//const TickType_t xTempo = (TEMPO/portTICK_PERIOD_MS);
+//const TickType_t xHalf  = xTempo/2;
+//const TickType_t xQuarter = xHalf/2;
+//const TickType_t xThird = xTempo/3;
+//const TickType_t xEigth = xQuarter/2;
+//
+//TickType_t xLastWakeTime;
+
+//void babysharkdoo() {
+//	xLastWakeTime = xTaskGetTickCount();
+//	//D-E G GG  GG  GG
+//	tone(BUZZER_PIN, DNOTE); //D
+//	vTaskDelayUntil(&xLastWakeTime, xHalf);
+//	tone(BUZZER_PIN, ENOTE); //E
+//	vTaskDelayUntil(&xLastWakeTime, xHalf);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xQuarter);
+//
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xHalf);
+//
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xHalf);
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xThird);
+//
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xQuarter);
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xQuarter);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xQuarter);
+//
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xThird);
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xThird);
+//
+//}
+//
+//void babyshark() {
+//	xLastWakeTime = xTaskGetTickCount();
+//
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xHalf);
+//	tone(BUZZER_PIN, GNOTE); //G
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xHalf);
+//
+//	tone(BUZZER_PIN, FSNOTE); //F#
+//	vTaskDelayUntil(&xLastWakeTime, xEigth);
+//	noTone(BUZZER_PIN);
+//	vTaskDelayUntil(&xLastWakeTime, xTempo);
+//	vTaskDelayUntil(&xLastWakeTime, xTempo);
+//}
+
+void playBBShark() {
 
 	while(1) {
 
