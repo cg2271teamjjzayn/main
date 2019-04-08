@@ -8,7 +8,7 @@ MotorData nullData;
 
 
 char in_code;
-char allData[9];
+char allData[11];
 int j = 0;
 
 

@@ -8,8 +8,8 @@
 #ifndef MUSIC_H_
 #define MUSIC_H_
 
-void playBBShark();
-
+void myTone(byte pin, uint16_t frequency, uint16_t duration);
+void Play_BabyShark();
 
 
 #endif /* MUSIC_H_ */
