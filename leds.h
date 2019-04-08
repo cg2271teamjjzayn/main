@@ -7,4 +7,4 @@ void greenStationary();
 void redStationary();
 void greenRunning();
 void redRunning();
-
+void connectMode();

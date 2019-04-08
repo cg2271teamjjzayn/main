@@ -86,6 +86,14 @@ void runningMode() {
 	redRunning();
 }
 
+void connectMode() {
+	for (int i = 0; i < 1; i++) {
+		greenStationary();
+		vTaskDelay(200);
+
+	}
+}
+
 
 void stationaryMode() {
 	greenStationary();

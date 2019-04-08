@@ -25,9 +25,6 @@ QueueHandle_t xLEDCommandQueue = xQueueCreate(1, sizeof(char));
 QueueHandle_t xMusicCommandQueue = xQueueCreate(1, sizeof(char));
 
 void xTaskLed(void *p) {
-	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 200;
-	xLastWakeTime = xTaskGetTickCount();
 
 	char status = STOPPED;
 
@@ -45,13 +42,12 @@ void xTaskLed(void *p) {
 
 
 void xTaskPlayMusic(void *p) {
-	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 200;
-	xLastWakeTime = xTaskGetTickCount();
+	TickType_t xLastWakeTime = xTaskGetTickCount();
+	const TickType_t xFrequency = 5;
 
 	for (;;) {
 		Play_BabyShark();
-//		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
 	}
 }
@@ -59,7 +55,7 @@ void xTaskPlayMusic(void *p) {
 
 void xTaskBluetooth(void *p) {
 	TickType_t xLastWakeTime = xTaskGetTickCount();
-	//const TickType_t xFrequency = 10;
+	const TickType_t xFrequency = 5;
 
 	MotorData *command;
 
@@ -70,7 +66,7 @@ void xTaskBluetooth(void *p) {
 			xQueueSend(xMotorCommandQueue, (void * ) &command,
 					(TickType_t ) 10);
 		}
-		vTaskDelayUntil(&xLastWakeTime, 5);
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 
@@ -120,11 +116,10 @@ void setup() {
 
 
 void loop() {
-//	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
-//	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
+	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
+	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
 	xTaskCreate(xTaskPlayMusic, "TaskMusic", STACK_SIZE, NULL, 2, NULL);
-//	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
+	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 1, NULL);
 	vTaskStartScheduler();
-
 
 }
