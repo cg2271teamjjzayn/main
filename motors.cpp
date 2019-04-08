@@ -141,7 +141,7 @@ void backwardLeft(int pwm_R, int pwm_L) {
 //	digitalWrite(RF, LOW);
 //	digitalWrite(LF, LOW);
 
-	analogWrite(RB, pwm_R );
+	analogWrite(RB, pwm_R);
 	analogWrite(LB, pwm_R - pwm_L);
 
 	analogWrite(RF, 0);
