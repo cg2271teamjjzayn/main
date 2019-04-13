@@ -21,6 +21,25 @@ void myTone(byte pin, uint16_t frequency, uint16_t duration) {
 	pinMode(pin, INPUT);
 }
 
+void Play_Mario() {
+	TickType_t xLastWakeTime = xTaskGetTickCount();
+
+	uint16_t currentNote;
+	uint16_t currentDuration;
+	for (int i = 0; i< 78; i++) {
+		currentNote = pgm_read_word_near(Mario_note + i);
+		currentDuration = pgm_read_word_near(Mario_durations + i);
+		int noteDuration = 1000 / currentDuration;
+		myTone(2, currentNote, noteDuration);
+
+		int pauseBetweenNotes = noteDuration * 0.1;
+		vTaskDelayUntil(&xLastWakeTime, pauseBetweenNotes);
+
+		digitalWrite(2, LOW);
+    }
+
+}
+
 void Play_Pirates() {
 	TickType_t xLastWakeTime = xTaskGetTickCount();
 

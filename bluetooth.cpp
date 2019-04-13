@@ -22,13 +22,17 @@ MotorData getData() {
 		in_code = Serial.read();
 		if(in_code != 'e') {
 			allData[j++] = in_code;
-		} else{
+		} else {
 			j = 0;
 			char *token = strtok(allData, "#");
 			mdata.mData[0] = atoi(token);
 			if (token != NULL){
 				token = strtok(NULL, "#");
 				mdata.mData[1] = atoi(token);
+			}
+			if (token != NULL){
+				token = strtok(NULL, "#");
+				mdata.command = atoi(token);
 			}
 		    memset(allData, 0, sizeof(allData));
 		}
@@ -37,6 +41,7 @@ MotorData getData() {
 	}
 	nullData.mData[0] = 0;
 	nullData.mData[1] = 0;
+	nullData.command = 4;
 	return nullData;
 }
 

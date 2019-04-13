@@ -1,5 +1,6 @@
 struct MotorData {
    int mData[2];
+   int command;
 };
 
 
