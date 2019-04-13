@@ -11,6 +11,6 @@
 void myTone(byte pin, uint16_t frequency, uint16_t duration);
 void Play_BabyShark();
 void Play_Pirates();
-
+void Play_Mario();
 
 #endif /* MUSIC_H_ */

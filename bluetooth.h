@@ -1,8 +1,8 @@
-struct MotorData {
-   int mData[2];
+struct BluetoothData {
+   int mData[2]; // MotorData
+   int command; // Bluetooth command
 };
 
-
 void setupBluetooth();
-MotorData getData();
+BluetoothData getData();
 void bluetoothISR();
