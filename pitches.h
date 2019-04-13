@@ -1,13 +1,5 @@
-/*
- * pitches.h
- *
- *  Created on: 20 Mar 2019
- *      Author: zhuan
- */
-
 #ifndef PITCHES_H_
 #define PITCHES_H_
-
 
 #define NOTE_B0  31
 #define NOTE_C1  33
@@ -98,4 +90,4 @@
 #define NOTE_CS8 4435
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
-#endif /* PITCHES_H_ */
+#endif

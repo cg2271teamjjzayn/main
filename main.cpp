@@ -115,18 +115,19 @@ void xTaskMotor(void *p) {
 }
 
 void setup() {
-
-	setupMotors();
 	setupLEDS();
+	setupMotors();
 	setupBluetooth();
-}
 
-
-void loop() {
 	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
 	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 2, NULL);
 	xTaskCreate(xTaskPlayMusic, "TaskMusic", STACK_SIZE, NULL, 2, NULL);
 	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 2, NULL);
 	vTaskStartScheduler();
+}
+
+
+void loop() {
+//	greenRunning();
 
 }

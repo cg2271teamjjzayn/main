@@ -4,18 +4,17 @@
 #include <task.h>
 #include <queue.h>
 
-
-
 //Pin connected to ST_CP of 74HC595
-int latchPin = 8;
+uint8_t latchPin = 8;
 //Pin connected to SH_CP of 74HC595
-int clockPin = 12;
+uint8_t clockPin = 12;
 ////Pin connected to DS of 74HC595
-int greenDataPin = 13;
-int redLED = 7;
+uint8_t greenDataPin = 13;
+uint8_t redLED = 7;
 
-byte data, allLEDS;
-byte dataArray[10];
+byte data;
+const PROGMEM byte dataArray[] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
+const PROGMEM byte allLEDS[] = { 0xFF };
 
 void shiftOut(int myDataPin, int myClockPin, byte myDataOut) {
 
@@ -65,20 +64,7 @@ void blinkAll_2Bytes(int n, int d) {
 void setupLEDS() {
 	pinMode(redLED, OUTPUT);
 	pinMode(latchPin, OUTPUT);
-
-	dataArray[0] = 0x01; //0b00000001
-	dataArray[1] = 0x02; //0b00000010
-	dataArray[2] = 0x04; //0b00000100
-	dataArray[3] = 0x08; //0b00001000
-	dataArray[4] = 0x10; //0b00010000
-	dataArray[5] = 0x20; //0b00100000
-	dataArray[6] = 0x40; //0b01000000
-	dataArray[7] = 0x80; //0b10000000
-
-	allLEDS = 0xFF;
-
 	blinkAll_2Bytes(2,500);
-
 }
 
 void runningMode() {
@@ -90,10 +76,8 @@ void connectMode() {
 	for (int i = 0; i < 1; i++) {
 		greenStationary();
 		vTaskDelay(200);
-
 	}
 }
-
 
 void stationaryMode() {
 	greenStationary();
@@ -101,14 +85,14 @@ void stationaryMode() {
 }
 
 void redRunning () {
-	digitalWrite(redLED,HIGH);
+	digitalWrite(redLED, HIGH);
 	vTaskDelay(500);
 	digitalWrite(redLED, LOW);
 	vTaskDelay(500);
 }
 void greenRunning () {
 	  for (int j = 0; j < 8; j++) {
-	    data = dataArray[j];
+	    data = pgm_read_byte_near(dataArray + j);
 	    digitalWrite(latchPin, 0);
 	    shiftOut(greenDataPin, clockPin, data);
 	    digitalWrite(latchPin, 1);
@@ -125,8 +109,8 @@ void redStationary() {
 
 /**ground latchPin and hold low for as long as you are transmitting**/
 void greenStationary () {
+	data = pgm_read_byte_near(allLEDS);
     digitalWrite(latchPin, 0);
-    shiftOut(greenDataPin, clockPin, allLEDS);
+    shiftOut(greenDataPin, clockPin, data);
     digitalWrite(latchPin, 1);
-
 }

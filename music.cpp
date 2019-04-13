@@ -24,12 +24,15 @@ void myTone(byte pin, uint16_t frequency, uint16_t duration) {
 void Play_Pirates() {
 	TickType_t xLastWakeTime = xTaskGetTickCount();
 
-	for (int thisNote = 0; thisNote < (sizeof(Pirates_note2)/sizeof(int)); thisNote++) {
+	uint16_t currentNote;
+	uint16_t currentDuration;
+	for (int i = 0; i< 89 ; i++) {
+		currentNote = pgm_read_word_near(Pirates_note + i);
+		currentDuration = pgm_read_word_near(Pirates_duration + i);
+		int noteDuration = 1000 / currentDuration;
+		myTone(2, currentNote, noteDuration);
 
-		int noteDuration = 1000 / Pirates_duration2[thisNote];
-		myTone(2, Pirates_note2[thisNote], noteDuration);
-
-		int pauseBetweenNotes = noteDuration * 1.5;
+		int pauseBetweenNotes = noteDuration * 0.1;
 		vTaskDelayUntil(&xLastWakeTime, pauseBetweenNotes);
 
 		digitalWrite(2, LOW);
@@ -40,14 +43,18 @@ void Play_Pirates() {
 
 void Play_BabyShark() {
 	TickType_t xLastWakeTime = xTaskGetTickCount();
+	uint16_t currentNote;
+	uint16_t currentDuration;
+	for (int i = 0; i < 50; i++) {
 
-	for (int thisNote = 0; thisNote < (sizeof(Babyshark_notes) / sizeof(int)); thisNote++) {
-
-		int noteDuration = 1000 / Babyshark_durations[thisNote];
-		myTone(2, Babyshark_notes[thisNote], noteDuration);
-
-		int pauseBetweenNotes = noteDuration * 1.5;
+		currentNote = pgm_read_word_near(Babyshark_notes + i);
+		currentDuration = pgm_read_word_near(Babyshark_durations + i);
+		int noteDuration = 1000 / currentDuration;
+		myTone(2, currentNote, noteDuration);
+		Serial.println(20);
+		int pauseBetweenNotes = noteDuration * 0.5;
 		vTaskDelayUntil(&xLastWakeTime, pauseBetweenNotes);
+		delay(pauseBetweenNotes);
 		digitalWrite(2, LOW);
 	}
 
