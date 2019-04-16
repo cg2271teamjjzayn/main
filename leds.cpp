@@ -12,7 +12,6 @@ uint8_t clockPin = 12;
 uint8_t greenDataPin = 13;
 uint8_t redLED = 7;
 
-byte data;
 const PROGMEM byte dataArray[] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 const PROGMEM byte allLEDS[] = { 0xFF };
 
@@ -40,23 +39,23 @@ void shiftOut(int myDataPin, int myClockPin, byte myDataOut) {
 }
 
 
-void blinkAll_2Bytes(int n, int d) {
+void blinkGreenTwice() {
   digitalWrite(latchPin, 0);
   shiftOut(greenDataPin, clockPin, 0);
   shiftOut(greenDataPin, clockPin, 0);
   digitalWrite(latchPin, 1);
   delay(200);
-  for (int x = 0; x < n; x++) {
+  for (int x = 0; x < 2; x++) {
     digitalWrite(latchPin, 0);
     shiftOut(greenDataPin, clockPin, 255);
     shiftOut(greenDataPin, clockPin, 255);
     digitalWrite(latchPin, 1);
-    delay(d);
+    delay(500);
     digitalWrite(latchPin, 0);
     shiftOut(greenDataPin, clockPin, 0);
     shiftOut(greenDataPin, clockPin, 0);
     digitalWrite(latchPin, 1);
-    delay(d);
+    delay(500);
   }
 }
 
@@ -64,24 +63,7 @@ void blinkAll_2Bytes(int n, int d) {
 void setupLEDS() {
 	pinMode(redLED, OUTPUT);
 	pinMode(latchPin, OUTPUT);
-	blinkAll_2Bytes(2,500);
-}
-
-void runningMode() {
-	greenRunning();
-	redRunning();
-}
-
-void connectMode() {
-	for (int i = 0; i < 1; i++) {
-		greenStationary();
-		vTaskDelay(200);
-	}
-}
-
-void stationaryMode() {
-	greenStationary();
-	redStationary();
+	blinkGreenTwice();
 }
 
 void redRunning () {
@@ -91,6 +73,7 @@ void redRunning () {
 	vTaskDelay(500);
 }
 void greenRunning () {
+	 byte data;
 	  for (int j = 0; j < 8; j++) {
 	    data = pgm_read_byte_near(dataArray + j);
 	    digitalWrite(latchPin, 0);
@@ -109,8 +92,7 @@ void redStationary() {
 
 /**ground latchPin and hold low for as long as you are transmitting**/
 void greenStationary () {
-	data = pgm_read_byte_near(allLEDS);
     digitalWrite(latchPin, 0);
-    shiftOut(greenDataPin, clockPin, data);
+    shiftOut(greenDataPin, clockPin, 0xFF);
     digitalWrite(latchPin, 1);
 }
