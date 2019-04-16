@@ -109,8 +109,7 @@ void redStationary() {
 
 /**ground latchPin and hold low for as long as you are transmitting**/
 void greenStationary () {
-	data = pgm_read_byte_near(allLEDS);
     digitalWrite(latchPin, 0);
-    shiftOut(greenDataPin, clockPin, data);
+    shiftOut(greenDataPin, clockPin, 0xFF);
     digitalWrite(latchPin, 1);
 }

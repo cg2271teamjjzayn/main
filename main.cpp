@@ -9,6 +9,7 @@
 #include "music.h"
 #include "pitches.h"
 #define STACK_SIZE 200
+#define STACK_SIZE_M 100
 #define maxMotorDelayCommand portMAX_DELAY
 
 #define CONNECTED 0
@@ -19,25 +20,43 @@
 MotorData dataMotor;
 
 QueueHandle_t xMotorCommandQueue = xQueueCreate(1, sizeof(struct MotorData *));
-QueueHandle_t xLEDCommandQueue = xQueueCreate(1, sizeof(char));
+QueueHandle_t xLEDGreenCommandQueue = xQueueCreate(1, sizeof(char));
+QueueHandle_t xLEDRedCommandQueue = xQueueCreate(1, sizeof(char));
 QueueHandle_t xMusicCommandQueue = xQueueCreate(1, sizeof(char));
 
-void xTaskLed(void *p) {
+void xTaskGreenLed(void *p) {
 	TickType_t xLastWakeTime = xTaskGetTickCount();
 	const TickType_t xFrequency = 5;
 
-	char status = STOPPED;
+	char status = MOVING;
 	for (;;) {
-		xQueueReceive(xLEDCommandQueue, &status, 0);
+		xQueueReceive(xLEDGreenCommandQueue, &status, 0);
 		if (status == CONNECTED) {
 			blinkAll_2Bytes(2, 500);
 		} else if (status == MOVING) {
-			runningMode();
+			greenRunning();
 		} else if (status == STOPPED) {
-			stationaryMode();
+			greenStationary();
 		}
 		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
+}
+
+void xTaskRedLed(void * p) {
+	TickType_t xLastWakeTime = xTaskGetTickCount();
+	const TickType_t xFrequency = 5;
+
+	char status = MOVING;
+	for (;;) {
+		xQueueReceive(xLEDRedCommandQueue, &status, 0);
+		if (status == MOVING) {
+			redRunning();
+		} else if (status == STOPPED) {
+			redStationary();
+		}
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+	}
+
 }
 
 void xTaskPlayMusic(void *p) {
@@ -48,6 +67,7 @@ void xTaskPlayMusic(void *p) {
 		xQueueReceive(xMusicCommandQueue, &status, 0);
 		if (status == CONNECTED) {
 			Play_Mario();
+			status = STOPPED;
 		} else if (status == FINISHED) {
 			Play_Pirates();
 		} else {
@@ -68,11 +88,13 @@ void xTaskBluetooth(void *p) {
 		dataMotor = getData();
 		if (dataMotor.command == CONNECTED) {
 			currStatus = CONNECTED;
-			xQueueSendToBack(xLEDCommandQueue, &currStatus, 3);
+			xQueueSendToBack(xLEDGreenCommandQueue, &currStatus, 3);
+			xQueueSendToBack(xLEDRedCommandQueue, &currStatus, 3);
 			xQueueSendToBack(xMusicCommandQueue, &currStatus, 3);
 		} else if (dataMotor.command == FINISHED) {
 			currStatus = FINISHED;
-			xQueueSendToBack(xLEDCommandQueue, &currStatus, 3);
+			xQueueSendToBack(xLEDGreenCommandQueue, &currStatus, 3);
+			xQueueSendToBack(xLEDRedCommandQueue, &currStatus, 3);
 			xQueueSendToBack(xMusicCommandQueue, &currStatus, 3);
 
 		} else {
@@ -117,7 +139,8 @@ void xTaskMotor(void *p) {
 				}
 			}
 			if (prevStatus != currStatus) {
-				xQueueSendToBack(xLEDCommandQueue, &currStatus, 3);
+				xQueueSendToBack(xLEDGreenCommandQueue, &currStatus, 3);
+				xQueueSendToBack(xLEDRedCommandQueue, &currStatus, 3);
 				xQueueSendToBack(xMusicCommandQueue, &currStatus, 3);
 				prevStatus = currStatus;
 			}
@@ -131,9 +154,11 @@ void setup() {
 	setupBluetooth();
 
 	xTaskCreate(xTaskBluetooth, "TaskBluetooth", STACK_SIZE, NULL, 4, NULL);
-	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 2, NULL);
+	xTaskCreate(xTaskMotor, "TaskMotor", STACK_SIZE, NULL, 3, NULL);
 	xTaskCreate(xTaskPlayMusic, "TaskMusic", STACK_SIZE, NULL, 2, NULL);
-	xTaskCreate(xTaskLed, "TaskLed", STACK_SIZE, NULL, 2, NULL);
+	xTaskCreate(xTaskGreenLed, "TaskGreenLed", STACK_SIZE_M, NULL, 2, NULL);
+	xTaskCreate(xTaskRedLed, "TaskRedLed", STACK_SIZE_M, NULL, 2, NULL);
+
 	vTaskStartScheduler();
 }
 

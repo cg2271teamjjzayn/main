@@ -2,6 +2,7 @@
 #include "music.h"
 #include "themes.h"
 #include "pitches.h"
+#include "bluetooth.h"
 #include <FreeRTOS.h>
 #include <task.h>
 #include <avr/io.h>
@@ -27,6 +28,9 @@ void Play_Mario() {
 	uint16_t currentNote;
 	uint16_t currentDuration;
 	for (int i = 0; i< 78; i++) {
+		if (Serial.available()) {
+			break;
+		}
 		currentNote = pgm_read_word_near(Mario_note + i);
 		currentDuration = pgm_read_word_near(Mario_durations + i);
 		int noteDuration = 1000 / currentDuration;
@@ -46,6 +50,9 @@ void Play_Pirates() {
 	uint16_t currentNote;
 	uint16_t currentDuration;
 	for (int i = 0; i< 89 ; i++) {
+		if (Serial.available()) {
+			break;
+		}
 		currentNote = pgm_read_word_near(Pirates_note + i);
 		currentDuration = pgm_read_word_near(Pirates_duration + i);
 		int noteDuration = 1000 / currentDuration;
@@ -65,7 +72,12 @@ void Play_BabyShark() {
 	uint16_t currentNote;
 	uint16_t currentDuration;
 	for (int i = 0; i < 50; i++) {
-
+		if (Serial.available()) {
+			MotorData dataMotor = getData();
+			if (dataMotor.command != 1) {
+				break;
+			}
+		}
 		currentNote = pgm_read_word_near(Babyshark_notes + i);
 		currentDuration = pgm_read_word_near(Babyshark_durations + i);
 		int noteDuration = 1000 / currentDuration;
