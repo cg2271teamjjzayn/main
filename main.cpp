@@ -70,6 +70,7 @@ void xTaskPlayMusic(void *p) {
 			status = STOPPED;
 		} else if (status == FINISHED) {
 			Play_Pirates();
+			status = FINISHED;
 		} else {
 			Play_BabyShark();
 		}
