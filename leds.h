@@ -2,7 +2,7 @@ void setupLEDS();
 void runningMode();
 void stationaryMode();
 void shiftOut(int, int, byte);
-void blinkAll_2Bytes(int , int);
+void blinkGreenTwice();
 void greenStationary();
 void redStationary();
 void greenRunning();

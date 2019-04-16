@@ -32,7 +32,7 @@ void xTaskGreenLed(void *p) {
 	for (;;) {
 		xQueueReceive(xLEDGreenCommandQueue, &status, 0);
 		if (status == CONNECTED) {
-			blinkAll_2Bytes(2, 500);
+			blinkGreenTwice();
 		} else if (status == MOVING) {
 			greenRunning();
 		} else if (status == STOPPED) {
@@ -85,26 +85,28 @@ void xTaskBluetooth(void *p) {
 	char currStatus = STOPPED;
 
 	for (;;) {
-		dataMotor = getData();
-		if (dataMotor.command == CONNECTED) {
-			currStatus = CONNECTED;
-			xQueueSendToBack(xLEDGreenCommandQueue, &currStatus, 3);
-			xQueueSendToBack(xLEDRedCommandQueue, &currStatus, 3);
-			xQueueSendToBack(xMusicCommandQueue, &currStatus, 3);
-		} else if (dataMotor.command == FINISHED) {
-			currStatus = FINISHED;
-			xQueueSendToBack(xLEDGreenCommandQueue, &currStatus, 3);
-			xQueueSendToBack(xLEDRedCommandQueue, &currStatus, 3);
-			xQueueSendToBack(xMusicCommandQueue, &currStatus, 3);
-
-		} else {
-			command = &dataMotor;
-			if (xMotorCommandQueue != 0) {
-				xQueueSend(xMotorCommandQueue, (void * ) &command,
-						(TickType_t ) 10);
+		if (Serial.available()) {
+			dataMotor = getData();
+			if (dataMotor.command == CONNECTED) {
+				currStatus = CONNECTED;
+				xQueueSendToBack(xLEDGreenCommandQueue, &currStatus, 3);
+				xQueueSendToBack(xLEDRedCommandQueue, &currStatus, 3);
+				xQueueSendToBack(xMusicCommandQueue, &currStatus, 3);
+			} else if (dataMotor.command == FINISHED) {
+				currStatus = FINISHED;
+				xQueueSendToBack(xLEDGreenCommandQueue, &currStatus, 3);
+				xQueueSendToBack(xLEDRedCommandQueue, &currStatus, 3);
+				xQueueSendToBack(xMusicCommandQueue, &currStatus, 3);
+			} else {
+				command = &dataMotor;
+				if (xMotorCommandQueue != 0) {
+					xQueueSend(xMotorCommandQueue, (void * ) &command,
+							(TickType_t ) 10);
+				}
 			}
 		}
 		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+
 	}
 }
 

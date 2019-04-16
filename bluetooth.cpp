@@ -3,9 +3,8 @@
 #include "bluetooth.h"
 #include <string.h>
 
-MotorData mdata;
 MotorData nullData;
-
+MotorData mdata;
 
 char in_code;
 char allData[11];
@@ -17,6 +16,7 @@ void setupBluetooth() {
 }
 
 MotorData getData() {
+
 
 	if(Serial.available()) {
 		in_code = Serial.read();

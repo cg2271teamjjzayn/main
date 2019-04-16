@@ -9,7 +9,6 @@
 
 
 void myTone(byte pin, uint16_t frequency, uint16_t duration) {
-	// input parameters: Arduino pin number, frequency in Hz, duration in milliseconds
 	unsigned long startTime = millis();
 	unsigned long halfPeriod = 1000000L / frequency / 2;
 	pinMode(pin, OUTPUT);
@@ -41,7 +40,6 @@ void Play_Mario() {
 
 		digitalWrite(2, LOW);
     }
-
 }
 
 void Play_Pirates() {
@@ -58,12 +56,11 @@ void Play_Pirates() {
 		int noteDuration = 1000 / currentDuration;
 		myTone(2, currentNote, noteDuration);
 
-		int pauseBetweenNotes = noteDuration * 0.1;
+		int pauseBetweenNotes = noteDuration * 1;
 		vTaskDelayUntil(&xLastWakeTime, pauseBetweenNotes);
 
 		digitalWrite(2, LOW);
     }
-
 }
 
 
@@ -82,11 +79,10 @@ void Play_BabyShark() {
 		currentDuration = pgm_read_word_near(Babyshark_durations + i);
 		int noteDuration = 1000 / currentDuration;
 		myTone(2, currentNote, noteDuration);
-		Serial.println(20);
-		int pauseBetweenNotes = noteDuration * 0.5;
+
+		int pauseBetweenNotes = noteDuration * 1.5;
 		vTaskDelayUntil(&xLastWakeTime, pauseBetweenNotes);
-		delay(pauseBetweenNotes);
+
 		digitalWrite(2, LOW);
 	}
-
 }
